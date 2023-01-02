@@ -90,6 +90,7 @@ WHERE 5 >
 	WHERE r.customer_id = c.customer_id);
 ------------------------------
 8-Select all customers with a minimum rating smaller than 4
+
 SELECT *
 FROM customers as c
 WHERE 4 >  
@@ -98,6 +99,7 @@ WHERE 4 >
 	WHERE r.customer_id = c.customer_id);
 ------------------------------
 9-OLAP [Group by CUBE]
+
 SELECT gender,  
 	   country,
 	   count(*)
@@ -106,6 +108,7 @@ GROUP BY CUBE (gender, country)
 ORDER BY country;
 ------------------------------
 10-OLAP [Group by ROLLUP] 
+
 SELECT country,
        gender,
 	   COUNT(*)
@@ -114,6 +117,7 @@ Group by ROLLUP (country,gender)
 ORDER BY country, gender; 
 ------------------------------
 11-Analyzing preferences of genres across countries
+
 SELECT 
 	c.country, 		-- Select country
 	m.genre, 		-- Select genre
