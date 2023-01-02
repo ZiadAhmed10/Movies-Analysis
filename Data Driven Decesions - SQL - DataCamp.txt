@@ -1,0 +1,134 @@
+1-Age of the actors from the USA :
+--------------
+SELECT a.gender, -- Report for male and female actors from the USA 
+       max(a.year_of_birth), -- The year of birth of the oldest actor
+       min(a.year_of_birth) -- The year of birth of the youngest actor
+FROM
+   (SELECT *
+   From actors
+   where nationality = 'USA'
+   ) as a -- Use a subsequen SELECT to get all information about actors from the US
+   -- Give the table the name a
+GROUP BY a.gender;
+
+----------------------------------
+2-Which is the favorite movie?
+-----
+SELECT m.title, 
+COUNT(*),
+AVG(r.rating)
+FROM renting AS r
+LEFT JOIN customers AS c
+ON c.customer_id = r.customer_id
+LEFT JOIN movies AS m
+ON m.movie_id = r.movie_id
+WHERE c.date_of_birth BETWEEN '1970-01-01' AND '1979-12-31'
+GROUP BY m.title
+HAVING COUNT(*) > 1		-- Remove movies with only one rental
+ORDER BY AVG(r.rating); 	-- Order with highest rating first
+---------------------------------------
+3-Favorite actors in spain ?
+---
+SELECT a.name,  c.gender,
+       COUNT(*) AS number_views, 
+       AVG(r.rating) AS avg_rating
+FROM renting as r
+LEFT JOIN customers AS c
+ON r.customer_id = c.customer_id
+LEFT JOIN actsin as ai
+ON r.movie_id = ai.movie_id
+LEFT JOIN actors as a
+ON ai.actor_id = a.actor_id
+Where c.country = 'Spain' -- Select only customers from Spain
+GROUP BY a.name, c.gender
+HAVING AVG(r.rating) IS NOT NULL 
+  AND COUNT(*) > 5 
+ORDER BY avg_rating DESC, number_views DESC;
+-----------------------------------------
+4-KPIs Per each country :
+---
+SELECT 
+	c.country,                   -- For each country report
+	Count(r.renting_id) AS number_renting, -- The number of movie rentals
+	AVG(r.rating) AS average_rating, -- The average rating
+	SUM(m.renting_price) AS revenue         -- The revenue from movie rentals
+FROM renting AS r
+LEFT JOIN customers AS c
+ON c.customer_id = r.customer_id
+LEFT JOIN movies AS m
+ON m.movie_id = r.movie_id
+WHERE date_renting >= '2019-01-01'
+GROUP BY c.country;
+------------------------------------------
+5-Select all movie ids with more than 5 views
+----------
+SELECT movie_id -- Select movie IDs with more than 5 views
+FROM renting
+GROUP BY movie_id
+HAVING COUNT(*) > 5 ;
+
+SELECT *
+FROM movies
+where movie_id in  -- Select movie IDs from the inner query
+	(SELECT movie_id
+	FROM renting
+	GROUP BY movie_id
+	HAVING COUNT(*) > 5);
+---------------------------------------------------
+6-Select all customers with more than 10 movie rentals
+-----------------
+SELECT *
+FROM customers
+where customer_id in            -- Select all customers with more than 10 movie rentals
+	(SELECT customer_id
+	FROM renting
+	GROUP BY customer_id
+	Having count(renting_id)> 10);
+-----------------------------------------------------------------
+7- Select movie IDs and calculate the average rating of movies with rating above average.
+--------------------------------
+SELECT movie_id, -- Select movie IDs and calculate the average rating 
+       avg(rating)
+FROM renting
+group by movie_id 
+Having avg(rating) >         -- Of movies with rating above average
+	(SELECT AVG(rating)
+	FROM renting);
+-------------------------------------------------------------------
+8- Movies with rating above the average rating:
+---------------
+SELECT title -- Report the movie titles of all movies with average rating higher than the total average
+FROM movies
+WHERE movie_id in
+	(SELECT movie_id
+	 FROM renting
+     GROUP BY movie_id
+     HAVING AVG(rating) > 
+		(SELECT AVG(rating)
+		 FROM renting));
+------------------------------------------------------------------
+Corelated subquery loops over the each row of the outer query and compare it with
+the inner query (It follows a looping mechanism )
+-------------------------------------------------------
+9-- Count movie rentals of customer 45
+SELECT COUNT(*)
+FROM renting as r
+WHERE r.customer_id = 45;
+-----------------------------------------
+10-Select customers with less than 5 movie rentals
+------------------
+SELECT *
+FROM customers as c
+WHERE 5 > 
+	(SELECT count(*)
+	FROM renting as r
+	WHERE r.customer_id = c.customer_id);
+---------------------------------------------------
+11-Select all customers with a minimum rating smaller than 4
+------------
+SELECT *
+FROM customers as c
+WHERE 4 >  
+	(SELECT MIN(rating)
+	FROM renting AS r
+	WHERE r.customer_id = c.customer_id);
