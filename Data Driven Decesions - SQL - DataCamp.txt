@@ -96,3 +96,33 @@ WHERE 4 >
 	(SELECT MIN(rating)
 	FROM renting AS r
 	WHERE r.customer_id = c.customer_id);
+------------------------------
+9-OLAP [Group by CUBE]
+SELECT gender,  
+	   country,
+	   count(*)
+FROM customers
+GROUP BY CUBE (gender, country)
+ORDER BY country;
+------------------------------
+10-OLAP [Group by ROLLUP] 
+SELECT country,
+       gender,
+	   COUNT(*)
+FROM customers
+Group by ROLLUP (country,gender)
+ORDER BY country, gender; 
+------------------------------
+11-Analyzing preferences of genres across countries
+SELECT 
+	c.country, 		-- Select country
+	m.genre, 		-- Select genre
+    AVG(r.rating), 		-- Average ratings
+	COUNT(*) 		-- Count number of movie rentals
+FROM renting AS r
+LEFT JOIN movies AS m
+ON m.movie_id = r.movie_id
+LEFT JOIN customers AS c
+ON r.customer_id = c.customer_id
+GROUP BY c.country, m.genre 		-- Aggregate for each country and each genre
+ORDER BY c.country, m.genre;
