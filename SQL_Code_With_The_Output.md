@@ -43,3 +43,19 @@
 
 ![preferences](https://user-images.githubusercontent.com/121814714/210361579-1b2ead1a-c891-41a6-891a-01d7dbe53dd9.PNG)
 --------------------------------------------------------------------
+12-Getting the number of actors per each nationality and gender 
+
+![12](https://user-images.githubusercontent.com/121814714/210372083-1e9414cf-8c64-415d-93af-f867d2e7c763.PNG)
+--------------------------------------------------------------------
+13-Getting the average rating of customers aggregated by country and gender [Using GROUPING SETS and LEFT JOIN]
+
+![13](https://user-images.githubusercontent.com/121814714/210372448-ab2e3a70-ba16-49b1-ae33-f4d3970d2106.PNG)
+--------------------------------------------------------------------
+14-Getting the customers' preference for genres 
+
+![14](https://user-images.githubusercontent.com/121814714/210374666-ba013fbb-faa1-45d2-9ce5-49c689cf0b2e.PNG)
+--------------------------------------------------------------------
+15-Analyzing customer preference for actors [Using LEFT JOINS , GROUPING SETS]
+
+![15](https://user-images.githubusercontent.com/121814714/210376697-edc6b48f-b865-41ac-a333-9f3bebbf9141.PNG)
+--------------------------------------------------------------------
