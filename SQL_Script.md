@@ -8,4 +8,5 @@ FROM
    where nationality = 'USA'
    ) as a 					
 GROUP BY a.gender;
-![Age](https://user-images.githubusercontent.com/121814714/210355930-22d67f72-e629-4dad-ace1-be8937b17b31.png)
+![Age](https://user-images.githubusercontent.com/121814714/210357296-ad5679a3-f700-4353-a1d1-00e1eaa332cc.png)
+
