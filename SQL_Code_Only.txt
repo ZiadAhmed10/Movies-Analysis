@@ -130,3 +130,64 @@ LEFT JOIN customers AS c
 ON r.customer_id = c.customer_id
 GROUP BY c.country, m.genre 		-- Aggregate for each country and each genre
 ORDER BY c.country, m.genre;
+------------------------------
+12-Getting the number of actors per each nationality and gender 
+
+SELECT 
+	nationality ,
+    	gender ,
+    	count(actor_id) 
+FROM actors
+GROUP BY GROUPING SETS ((nationality), (gender), ()); 
+------------------------------
+13-Getting the average rating of customers aggregated by country and gender [Using GROUPING SETS and LEFT JOIN]
+
+SELECT 
+	c.country, 
+    	c.gender,
+	AVG(r.rating)
+FROM renting AS r
+LEFT JOIN customers AS c
+ON r.customer_id = c.customer_id
+GROUP BY GROUPING SETS ((country, gender), country , gender , ());
+------------------------------
+14-Getting the customers' preference for genres 
+
+SELECT genre,
+	   AVG(rating) AS avg_rating,
+	   COUNT(rating) AS n_rating,
+       	   COUNT(*) AS n_rentals,     
+	   COUNT(DISTINCT m.movie_id) AS n_movies 
+FROM renting AS r
+LEFT JOIN movies AS m
+ON m.movie_id = r.movie_id
+WHERE r.movie_id IN ( 
+	SELECT movie_id
+	FROM renting
+	GROUP BY movie_id
+	HAVING COUNT(rating) >= 3 )
+AND r.date_renting >= '2018-01-01'
+GROUP BY genre
+Order by avg_rating DESC;
+------------------------------
+15-Analyzing customer preference for actors [Using LEFT JOINS , GROUPING SETS]
+
+SELECT a.nationality,
+           a.gender,
+	   AVG(r.rating) AS avg_rating,
+	   COUNT(r.rating) AS n_rating,
+	   COUNT(*) AS n_rentals,
+	   COUNT(DISTINCT a.actor_id) AS n_actors
+FROM renting AS r
+LEFT JOIN actsin AS ai
+ON ai.movie_id = r.movie_id
+LEFT JOIN actors AS a
+ON ai.actor_id = a.actor_id
+WHERE r.movie_id IN ( 
+	SELECT movie_id
+	FROM renting
+	GROUP BY movie_id
+	HAVING COUNT(rating) >= 4)
+AND r.date_renting >= '2018-04-01'
+GROUP BY GROUPING SETS ((nationality ,gender) , nationality , gender , ());
+------------------------------
