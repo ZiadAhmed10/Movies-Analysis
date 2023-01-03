@@ -9,7 +9,6 @@ FROM
    where nationality = 'USA'
    ) as a 					-- Use a subsequen SELECT to get all information about actors from the US
 GROUP BY a.gender;
-![Age](https://user-images.githubusercontent.com/121814714/210355930-22d67f72-e629-4dad-ace1-be8937b17b31.png)
 ------------------------------
 2-Which is the favorite movie ?
 
